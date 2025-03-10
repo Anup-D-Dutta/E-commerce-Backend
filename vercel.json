@@ -1,6 +1,4 @@
 {
-    "version" : 2,
-    "name" : "Test",
     "builds" : [
         {
             "src" : "./index.js",
