@@ -22,7 +22,8 @@ const app = express()
 // }))
 const allowedOrigins = [
     process.env.FRONTEND_URL,  // Load from .env
-    'http://localhost:5174'   // If needed, add more origins
+    "https://e-commerce-frontend-sand-five.vercel.app",
+    "http://localhost:5174"   // If needed, add more origins
 ];
 
 app.use(cors({
@@ -38,7 +39,8 @@ app.use(cors({
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(morgan())
+// app.use(morgan())
+app.use(morgan('combined'))  // or 'dev', 'tiny'
 app.use(helmet({
     crossOriginResourcePolicy : false
 }))
