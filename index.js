@@ -47,6 +47,13 @@ app.use(helmet({
 
 const PORT = 5080 || process.env.PORT 
 
+app.get("/env", (req, res) => {
+    res.json({
+        frontendUrl: process.env.FRONTEND_URL,
+    });
+});
+
+
 app.get("/",(request,response)=>{
     ///server to client
     response.json({
