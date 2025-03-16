@@ -27,8 +27,8 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-    credentials: true,
     origin: "*",
+    credentials: true,
 }));
 
 
@@ -37,10 +37,10 @@ app.use(cookieParser())
 // app.use(morgan())
 app.use(morgan('combined'))  // or 'dev', 'tiny'
 app.use(helmet({
-    crossOriginResourcePolicy : false
+    crossOriginResourcePolicy: false
 }))
 
-const PORT = 5080 || process.env.PORT 
+const PORT = 5080 || process.env.PORT
 
 app.get("/env", (req, res) => {
     res.json({
@@ -49,25 +49,25 @@ app.get("/env", (req, res) => {
 });
 
 
-app.get("/",(request,response)=>{
+app.get("/", (request, response) => {
     ///server to client
     response.json({
-        message : "Server is running " + PORT
+        message: "Server is running " + PORT
     })
 })
 
-app.use('/api/user',userRouter)
-app.use("/api/category",categoryRouter)
-app.use("/api/file",uploadRouter)
-app.use("/api/subcategory",subCategoryRouter)
-app.use("/api/product",productRouter)
-app.use("/api/cart",cartRouter)
-app.use("/api/address",addressRouter)
-app.use('/api/order',orderRouter)
+app.use('/api/user', userRouter)
+app.use("/api/category", categoryRouter)
+app.use("/api/file", uploadRouter)
+app.use("/api/subcategory", subCategoryRouter)
+app.use("/api/product", productRouter)
+app.use("/api/cart", cartRouter)
+app.use("/api/address", addressRouter)
+app.use('/api/order', orderRouter)
 
-connectDB().then(()=>{
-    app.listen(PORT,()=>{
-        console.log("Server is running",PORT)
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("Server is running", PORT)
     })
 })
 
