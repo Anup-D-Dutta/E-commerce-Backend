@@ -28,8 +28,9 @@ const allowedOrigins = [
 
 app.use(cors({
     credentials: true,
-    origin: "*",
+    origin: process.env.FRONTEND_URL || "https://e-commerce-frontend-sand-five.vercel.app",
 }));
+
 
 
 app.use(express.json())
