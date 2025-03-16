@@ -9,66 +9,135 @@ import generatedOtp from '../utils/generatedOtp.js'
 import forgotPasswordTemplate from '../utils/forgotPasswordTemplate.js'
 import jwt from 'jsonwebtoken'
 
-export async function registerUserController(request,response){
+// export async function registerUserController(request,response){
+//     try {
+//         const { name, email , password } = request.body
+
+//         if(!name || !email || !password){
+//             return response.status(400).json({
+//                 message : "provide email, name, password",
+//                 error : true,
+//                 success : false
+//             })
+//         }
+
+//         const user = await UserModel.findOne({ email })
+
+//         if(user){
+//             return response.json({
+//                 message : "Already register email",
+//                 error : true,
+//                 success : false
+//             })
+//         }
+
+//         const salt = await bcryptjs.genSalt(10)
+//         const hashPassword = await bcryptjs.hash(password,salt)
+
+//         const payload = {
+//             name,
+//             email,
+//             password : hashPassword
+//         }
+
+//         const newUser = new UserModel(payload)
+//         const save = await newUser.save()
+
+//         const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`
+
+//         const verifyEmail = await sendEmail({
+//             sendTo : email,
+//             subject : "Verify email from binkeyit",
+//             html : verifyEmailTemplate({
+//                 name,
+//                 url : VerifyEmailUrl
+//             })
+//         })
+
+//         return response.json({
+//             message : "User register successfully",
+//             error : false,
+//             success : true,
+//             data : save
+//         })
+
+//     } catch (error) {
+//         return response.status(500).json({
+//             message : error.message || error,
+//             error : true,
+//             success : false
+//         })
+//     }
+// }
+
+export async function registerUserController(request, response) {
+    // ✅ Set CORS headers explicitly
+    response.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL || "https://e-commerce-frontend-sand-five.vercel.app");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
     try {
-        const { name, email , password } = request.body
+        console.log("🔹 Register API hit with data:", request.body);
 
-        if(!name || !email || !password){
+        const { name, email, password } = request.body;
+
+        if (!name || !email || !password) {
             return response.status(400).json({
-                message : "provide email, name, password",
-                error : true,
-                success : false
-            })
+                message: "Provide email, name, password",
+                error: true,
+                success: false
+            });
         }
 
-        const user = await UserModel.findOne({ email })
+        const user = await UserModel.findOne({ email });
 
-        if(user){
-            return response.json({
-                message : "Already register email",
-                error : true,
-                success : false
-            })
+        if (user) {
+            return response.status(400).json({  // ✅ Return 400 for client errors
+                message: "Email is already registered",
+                error: true,
+                success: false
+            });
         }
 
-        const salt = await bcryptjs.genSalt(10)
-        const hashPassword = await bcryptjs.hash(password,salt)
+        const salt = await bcryptjs.genSalt(10);
+        const hashPassword = await bcryptjs.hash(password, salt);
 
-        const payload = {
-            name,
-            email,
-            password : hashPassword
-        }
+        const payload = { name, email, password: hashPassword };
 
-        const newUser = new UserModel(payload)
-        const save = await newUser.save()
+        const newUser = new UserModel(payload);
+        const save = await newUser.save();
 
-        const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`
+        const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`;
 
         const verifyEmail = await sendEmail({
-            sendTo : email,
-            subject : "Verify email from binkeyit",
-            html : verifyEmailTemplate({
+            sendTo: email,
+            subject: "Verify your email - BinkeyIT",
+            html: verifyEmailTemplate({
                 name,
-                url : VerifyEmailUrl
+                url: VerifyEmailUrl
             })
-        })
+        });
 
-        return response.json({
-            message : "User register successfully",
-            error : false,
-            success : true,
-            data : save
-        })
+        console.log("✅ User registered successfully:", save.email);
+
+        return response.status(201).json({
+            message: "User registered successfully",
+            error: false,
+            success: true,
+            data: save
+        });
 
     } catch (error) {
+        console.error("❌ Registration error:", error);
         return response.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : false
-        })
+            message: "Internal Server Error",
+            error: error.message || error,
+            success: false
+        });
     }
 }
+
 
 export async function verifyEmailController(request,response){
     try {
