@@ -14,21 +14,24 @@ import productRouter from './route/product.route.js'
 import cartRouter from './route/cart.route.js'
 import addressRouter from './route/address.route.js'
 import orderRouter from './route/order.route.js'
+import wishlistRoutes from './route/wishlistRoutes.js'
 
 const app = express()
 // app.use(cors({
-//     credentials : true,
-//     origin : process.env.FRONTEND_URL
+//     credentials: true,
+//     origin: process.env.FRONTEND_URL
 // }))
 const allowedOrigins = [
     process.env.FRONTEND_URL,  // Load from .env
     "https://e-commerce-frontend-sand-five.vercel.app",
-    "http://localhost:5174"   // If needed, add more origins
+    "http://localhost:5174",  // If needed, add more origins
+    "http://localhost:5173"   // If needed, add more origins
+
 ];
 
 app.use(cors({
-    origin: "*",
     credentials: true,
+    origin: allowedOrigins
 }));
 
 
@@ -57,6 +60,7 @@ app.get("/", (request, response) => {
 })
 
 app.use('/api/user', userRouter)
+app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/category", categoryRouter)
 app.use("/api/file", uploadRouter)
 app.use("/api/subcategory", subCategoryRouter)
