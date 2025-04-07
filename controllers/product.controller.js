@@ -14,6 +14,7 @@ export const createProductController = async(request,response)=>{
             discount,
             description,
             more_details,
+            sizes,
         } = request.body 
 
         if(!name || !image[0] || !category[0] || !subCategory[0] || !unit || !price || !description ){
@@ -35,6 +36,7 @@ export const createProductController = async(request,response)=>{
             discount,
             description,
             more_details,
+            sizes
         })
         const saveProduct = await product.save()
 

@@ -66,7 +66,7 @@
 
 // export default ProductModel
 
- //-------------------------------------------------
+//-------------------------------------------------
 
 
 import mongoose from "mongoose";
@@ -120,9 +120,16 @@ const productSchema = new mongoose.Schema({
         default: true
     },
     sizes: {
-        type: [String],
+        type: [
+            {
+                size: { type: String, required: true },
+                quantity: { type: Number, default: 0 },
+            }
+        ],
         default: []
     }
+
+
 }, {
     timestamps: true
 });
