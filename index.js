@@ -21,17 +21,30 @@ const app = express()
 //     credentials: true,
 //     origin: process.env.FRONTEND_URL
 // }))
-const allowedOrigins = [
-    process.env.FRONTEND_URL,  // Load from .env
-    "https://e-commerce-frontend-sand-five.vercel.app",
-    "http://localhost:5174",  // If needed, add more origins
-    "http://localhost:5173"   // If needed, add more origins
 
-];
+// const allowedOrigins = [
+//     // process.env.FRONTEND_URL,  
+//     // "https://e-commerce-frontend-sand-five.vercel.app",
+//     "http://localhost:5174",
+//     "http://localhost:5173"
+
+// ];
+
+// app.use(cors({
+//     credentials: true,
+//     origin: allowedOrigins
+// }));
 
 app.use(cors({
-    credentials: true,
-    origin: allowedOrigins
+    origin: function (origin, callback) {
+        const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
 }));
 
 
