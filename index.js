@@ -37,8 +37,8 @@ const app = express()
 
 const allowedOrigins = [
     "http://localhost:5173", // for local dev
-    "https://e-commerce-frontend-7ng0s9sd2-anup-duttas-projects.vercel.app", // production frontend
-    "https://e-commerce-frontend-5vemr275h-anup-duttas-projects.vercel.app"
+    "https://e-commerce-frontend-5vemr275h-anup-duttas-projects.vercel.app",
+    "https://e-commerce-frontend-mfyb4kwsc-anup-duttas-projects.vercel.app"
 ];
 
 app.use(cors({
