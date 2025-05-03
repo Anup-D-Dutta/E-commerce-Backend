@@ -1,60 +1,77 @@
 import ProductModel from "../models/product.model.js";
 import mongoose from "mongoose";
 
-export const createProductController = async(request,response)=>{
+
+export const createProductController = async (request, response) => {
     try {
-        const { 
-            name ,
-            image ,
+        const {
+            name,
+            image,
             category,
             subCategory,
-            unit,
-            stock,
+            // unit,
+            // stock,
             price,
             discount,
+            details,
             description,
+            artist_details,
             more_details,
             sizes,
-        } = request.body 
+        } = request.body;
 
-        if(!name || !image[0] || !category[0] || !subCategory[0] || !unit || !price || !description ){
+        if (
+            !name ||
+            !Array.isArray(image) || !image.length ||
+            !Array.isArray(category) || !category.length ||
+            !Array.isArray(subCategory) || !subCategory.length ||
+            // !unit ||
+            !price ||
+            !description ||
+            !details ||
+            !artist_details
+        ) {
             return response.status(400).json({
-                message : "Enter required fields",
-                error : true,
-                success : false
-            })
+                message: "Enter all required fields",
+                error: true,
+                success: false
+            });
         }
 
         const product = new ProductModel({
-            name ,
-            image ,
+            name: name.trim(),
+            image,
             category,
             subCategory,
-            unit,
-            stock,
+            // unit: unit.trim(),
+            // stock,
             price,
             discount,
-            description,
+            details: details.trim(),
+            description: description.trim(),
+            artist_details: artist_details.trim(),
             more_details,
             sizes
-        })
-        const saveProduct = await product.save()
+        });
 
-        return response.json({
-            message : "Product Created Successfully",
-            data : saveProduct,
-            error : false,
-            success : true
-        })
+        const saveProduct = await product.save();
+
+        return response.status(201).json({
+            message: "Product Created Successfully",
+            data: saveProduct,
+            error: false,
+            success: true
+        });
 
     } catch (error) {
         return response.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : false
-        })
+            message: error.message || "Internal Server Error",
+            error: true,
+            success: false
+        });
     }
-}
+};
+
 
 export const getProductController = async(request,response)=>{
     try {
@@ -130,66 +147,6 @@ export const getProductByCategory = async(request,response)=>{
     }
 }
 
-// export const getProductByCategoryAndSubCategory  = async(request,response)=>{
-//     try {
-//         const { categoryId,subCategoryId,page,limit } = request.body
-
-//         if(!categoryId || !subCategoryId){
-//             return response.status(400).json({
-//                 message : "Provide categoryId and subCategoryId",
-//                 error : true,
-//                 success : false
-//             })
-//         }
-
-//         if(!page){
-//             page = 1
-//         }
-
-//         if(!limit){
-//             limit = 10
-//         }
-
-//         // const query = {
-//         //     category : { $in :categoryId  },
-//         //     subCategory : { $in : subCategoryId }
-//         // }
-//         const query = {
-//             category: categoryId,  // Assuming categoryId is a single ID
-//             subCategory: subCategoryId  // Assuming subCategoryId is a single ID
-//         };
-
-//         const skip = (page - 1) * limit
-
-//         const [data,dataCount] = await Promise.all([
-//             ProductModel.find(query).sort({createdAt : -1 }).skip(skip).limit(limit),
-//             ProductModel.countDocuments(query)
-//         ])
-
-//         // return response.json({
-//         //     message : "Product list",
-//         //     data : data,
-//         //     totalCount : dataCount,
-//         //     page : page,
-//         //     limit : limit,
-//         //     success : true,
-//         //     error : false
-//         // })
-//         return response.status(500).json({
-//             message: error.message || 'An unexpected error occurred',
-//             error: true,
-//             success: false
-//         });
-        
-
-//     } catch (error) {
-//         return response.status(500).json({
-//             message : error.message || error,
-//             error : true,
-//             success : false
-//         })
-//     }
-// }
 
 export const getProductByCategoryAndSubCategory = async (request, response) => {
     try {
@@ -328,52 +285,6 @@ export const deleteProductDetails = async(request,response)=>{
         })
     }
 }
-
-//search product
-// export const searchProduct = async(request,response)=>{
-//     try {
-//         let { search, page , limit } = request.body 
-
-//         if(!page){
-//             page = 1
-//         }
-//         if(!limit){
-//             limit  = 10
-//         }
-
-//         const query = search ? {
-//             $text : {
-//                 $search : search
-//             }
-//         } : {}
-
-//         const skip = ( page - 1) * limit
-
-//         const [data,dataCount] = await Promise.all([
-//             ProductModel.find(query).sort({ createdAt  : -1 }).skip(skip).limit(limit).populate('category subCategory'),
-//             ProductModel.countDocuments(query)
-//         ])
-
-//         return response.json({
-//             message : "Product data",
-//             error : false,
-//             success : true,
-//             data : data,
-//             totalCount :dataCount,
-//             totalPage : Math.ceil(dataCount/limit),
-//             page : page,
-//             limit : limit 
-//         })
-
-
-//     } catch (error) {
-//         return response.status(500).json({
-//             message : error.message || error,
-//             error : true,
-//             success : false
-//         })
-//     }
-// }
 
 export const searchProduct = async (request, response) => {
     try {

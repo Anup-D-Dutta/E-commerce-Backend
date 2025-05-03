@@ -91,14 +91,6 @@ const productSchema = new mongoose.Schema({
             ref: 'subCategory'
         }
     ],
-    unit: {
-        type: String,
-        default: ""
-    },
-    stock: {
-        type: Number,
-        default: null
-    },
     price: {  // ✅ Fixed typo here
         type: Number,
         default: null
@@ -108,6 +100,14 @@ const productSchema = new mongoose.Schema({
         default: null
     },
     description: {
+        type: String,
+        default: ""
+    },
+    details: {
+        type: String,
+        default: ""
+    },
+    artist_details: {
         type: String,
         default: ""
     },
