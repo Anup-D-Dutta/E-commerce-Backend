@@ -39,6 +39,7 @@ const allowedOrigins = [
     "http://localhost:5173", // for local dev
     "https://e-commerce-frontend-dol5ao2cq-anup-duttas-projects.vercel.app",
     "https://e-commerce-frontend-3ce3z0mbu-anup-duttas-projects.vercel.app"
+    "https://trendoraaa.netlify.app"
 ];
 
 app.use(cors({
